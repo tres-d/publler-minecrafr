@@ -1,0 +1,73 @@
+const discord = require("discord.js");
+const util = require('minecraft-server-util');
+const {MessageEmbed} = require('discord.js');
+const bot = new discord.Client();
+const token = "";
+const PREFIX = "-";
+
+
+var version = "1.0.1"
+util.status("hypixel.net")
+
+bot.on("ready", ()=>{
+  console.log("this bot is online!")
+})
+
+bot.on("message", message=>{
+  let args = message.content.slice(PREFIX.length).split(" ")
+
+  switch(args[0]){
+    case "ping":
+      message.reply ("pong");
+      break;
+    case "website":
+      message.channel.send("youtube.com/probler")
+      break;
+    case "info":
+      if(args[1] === "version"){
+        message.channel.send("We Are Curently In Version " + version)
+      }
+      else{
+        message.channel.send("Invalid Command")
+      }
+      break;
+    case "clear":
+      if(!args[1]) return message.reply("Error Please Define A Number")
+      message.channel.bulkDelete(args[1]);
+      break;
+
+    case "embed":
+      const embed = new MessageEmbed()
+      .setColor('RANDOM')
+      .setTitle("User Information")
+      .addField("Player Name", message.author.username, true)
+      .addField("Current Server", message.guild.name,)
+      .setThumbnail(message.author.displayAvatarURL())
+      .setFooter("Version " + version)
+      message.channel.send(embed);
+      break;
+
+      case 'mc':
+        const util = require('minecraft-server-util');
+    
+        util.status(args[1])
+        .then ((response) => {
+            const embed = new MessageEmbed()
+            .setColor("RANDOM")
+            .setTitle('__Server Status__')
+            .addField('Server IP', response.host)
+            .addField('Server Version', response.version)
+            .addField('Online Players', response.onlinePlayers)
+            .addField('Max Players', response.maxPlayers)    
+            message.channel.send(embed)
+        
+        })
+       .catch((error, response) => {
+           throw error;
+       });
+       break;
+      }
+  }
+)
+
+bot.login(token);
